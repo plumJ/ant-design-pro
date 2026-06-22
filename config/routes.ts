@@ -44,6 +44,23 @@ export default [
     ],
   },
   {
+    path: '/finance',
+    name: 'finance',
+    icon: 'dollar',
+    routes: [
+      {
+        path: '/finance',
+        redirect: '/finance/profit-dashboard',
+      },
+      {
+        name: 'profit-dashboard',
+        icon: 'pieChart',
+        path: '/finance/profit-dashboard',
+        component: './finance/profit-dashboard',
+      },
+    ],
+  },
+  {
     path: '/welcome',
     name: 'welcome',
     icon: 'home',
