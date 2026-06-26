@@ -28,19 +28,7 @@ const rate2025 = [
   0.12, 0.16, 0.15, 0.145, 0.14, 0.135, 0.13, 0.125, 0.115, 0.105, 0.095, 0.078,
 ];
 
-// ==================== 图表数据 ====================
-
-const barData2025 = months.flatMap((month, i) => [
-  { month, type: '收入', value: revenue2025[i] },
-  { month, type: '净利润', value: profit2025[i] },
-]);
-
-const lineData2025 = months.map((month, i) => ({
-  month,
-  value: rate2025[i],
-}));
-
-// 2026 年数据（仅 1-4 月有实际值）
+// 2026 年 1-4 月实际值
 const revenue2026: Record<number, number> = {
   0: 2900,
   1: 2700,
@@ -53,21 +41,56 @@ const profit2026: Record<number, number> = {
   2: 380,
   3: 320,
 };
-const rate2026Actual = [
-  { month: '1月', value: 0.16 },
-  { month: '2月', value: 0.159 },
-  { month: '3月', value: 0.158 },
-  { month: '4月', value: 0.16 },
-];
-const rate2026Project = months.slice(4).map((month) => ({
-  month,
-  value: 0.11,
-}));
 
-const barData2026 = months.slice(0, 4).flatMap((month, i) => [
-  { month, type: '收入', value: revenue2026[i] },
-  { month, type: '净利润', value: profit2026[i] },
+// 2026 年 5-12 月预测值（利润率 16%）
+const projectedRevenue = [1900, 1800, 1700, 1850, 1950, 2100, 2300, 2500];
+const projectedProfit = [304, 288, 272, 296, 312, 336, 368, 400];
+
+// 2026 年利润率
+const rate2026ActualValues = [0.16, 0.159, 0.158, 0.16];
+
+// ==================== X 轴标签 ====================
+
+const monthsLabel25 = months.map((m) => `25/${m}`);
+const monthsLabel26 = months.map((m) => `26/${m}`);
+const allMonthsLabel = [...monthsLabel25, ...monthsLabel26];
+
+// ==================== 柱状数据 ====================
+
+// 实际值：2025 全年 + 2026 年 1-4 月
+const actualBarData = [
+  ...months.flatMap((m, i) => [
+    { month: `25/${m}`, type: '收入', value: revenue2025[i] },
+    { month: `25/${m}`, type: '净利润', value: profit2025[i] },
+  ]),
+  ...months.slice(0, 4).flatMap((m, i) => [
+    { month: `26/${m}`, type: '收入', value: revenue2026[i] },
+    { month: `26/${m}`, type: '净利润', value: profit2026[i] },
+  ]),
+];
+
+// 预测值：2026 年 5-12 月
+const projectedBarData = months.slice(4).flatMap((m, i) => [
+  { month: `26/${m}`, type: '收入', value: projectedRevenue[i] },
+  { month: `26/${m}`, type: '净利润', value: projectedProfit[i] },
 ]);
+
+// ==================== 折线数据 ====================
+
+// 实际值折线：2025 全年 + 2026 年 1-4 月
+const actualLineData = [
+  ...months.map((m, i) => ({ month: `25/${m}`, value: rate2025[i] })),
+  ...months.slice(0, 4).map((m, i) => ({
+    month: `26/${m}`,
+    value: rate2026ActualValues[i],
+  })),
+];
+
+// 预测值折线：2026 年 5-12 月
+const projectedLineData = months.slice(4).map((m) => ({
+  month: `26/${m}`,
+  value: 0.16,
+}));
 
 // ==================== 图例 ====================
 
@@ -139,6 +162,46 @@ const legendNode = (
       />
       净利润率（趋势）
     </span>
+    <span
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: 6,
+        whiteSpace: 'nowrap',
+      }}
+    >
+      <span
+        style={{
+          display: 'inline-block',
+          width: 12,
+          height: 12,
+          backgroundColor: '#1E293B',
+          borderRadius: 2,
+          opacity: 0.35,
+          flexShrink: 0,
+        }}
+      />
+      收入/净利润（预测）
+    </span>
+    <span
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: 6,
+        whiteSpace: 'nowrap',
+      }}
+    >
+      <span
+        style={{
+          display: 'inline-block',
+          width: 16,
+          height: 0,
+          borderTop: '2px dashed #3B82F6',
+          flexShrink: 0,
+        }}
+      />
+      净利润率（预测）
+    </span>
   </div>
 );
 
@@ -161,166 +224,148 @@ const cardTitle = (title: string) => (
 
 const ProfitAnalysis: FC = () => {
   return (
-    <div style={{ display: 'flex', gap: 24, marginBottom: 24 }}>
-      <Card
-        variant="borderless"
-        style={{ flex: 1 }}
-        title={cardTitle('2025年收入利润分析')}
-      >
-        <DualAxes
-          height={380}
-          xField="month"
-          axis={{
-            y: false,
-          }}
-          {...{
-            children: [
-              {
-                type: 'interval',
-                data: barData2025,
-                xField: 'month',
-                yField: 'value',
-                colorField: 'type',
-                group: true,
-                scale: {
-                  x: { domain: months },
-                  y: { key: 'leftY', domainMin: 0, domainMax: 5000 },
-                  color: {
-                    domain: ['收入', '净利润'],
-                    range: ['#1E293B', '#6EE7B7'],
-                  },
+    <Card
+      variant="borderless"
+      style={{ marginBottom: 24 }}
+      title={cardTitle('2025-2026年收入利润分析')}
+    >
+      <DualAxes
+        height={380}
+        xField="month"
+        axis={{
+          y: false,
+        }}
+        {...{
+          children: [
+            // ① 实际值柱子 — 实心，正常颜色
+            {
+              type: 'interval',
+              data: actualBarData,
+              xField: 'month',
+              yField: 'value',
+              colorField: 'type',
+              group: true,
+              scale: {
+                x: { domain: allMonthsLabel },
+                y: { key: 'leftY', domainMin: 0, domainMax: 5000 },
+                color: {
+                  domain: ['收入', '净利润'],
+                  range: ['#1E293B', '#6EE7B7'],
                 },
-                axis: {
-                  y: {
-                    title: false,
-                    position: 'left',
-                    labelFormatter: (v: number) => (v === 0 ? '0' : `${v}万`),
-                    grid: {
-                      line: {
-                        style: { lineDash: [4, 4], stroke: '#E5E7EB' },
-                      },
+              },
+              axis: {
+                y: {
+                  title: false,
+                  position: 'left',
+                  labelFormatter: (v: number) => (v === 0 ? '0' : `${v}万`),
+                  grid: {
+                    line: {
+                      style: { lineDash: [4, 4], stroke: '#E5E7EB' },
                     },
                   },
-                  x: { grid: null, labelAutoHide: false, transform: [] },
                 },
-                legend: false,
-                tooltip: {
-                  title: (d: { month: string }) => d.month,
-                },
-              },
-              {
-                type: 'line',
-                data: lineData2025,
-                xField: 'month',
-                yField: 'value',
-                scale: {
-                  y: { key: 'rightY', domainMin: 0, domainMax: 0.2 },
-                  color: { range: ['#3B82F6'] },
-                },
-                axis: {
-                  y: {
-                    title: false,
-                    position: 'right',
-                    labelFormatter: (v: number) => `${(v * 100).toFixed(0)}%`,
-                    grid: null,
-                  },
-                },
-                style: { stroke: '#3B82F6', lineWidth: 2 },
-                legend: false,
-                tooltip: {
-                  items: [
-                    (d: { value: number }) => ({
-                      name: '净利润率',
-                      value: `${(d.value * 100).toFixed(1)}%`,
-                      color: '#3B82F6',
-                    }),
-                  ],
+                x: {
+                  grid: null,
+                  labelAutoHide: false,
+                  labelAutoRotate: true,
+                  transform: [],
                 },
               },
-            ],
-          }}
-        />
-      </Card>
-      <Card
-        variant="borderless"
-        style={{ flex: 1 }}
-        title={cardTitle('2026年收入利润分析')}
-      >
-        <DualAxes
-          height={380}
-          xField="month"
-          axis={{
-            y: false,
-          }}
-          {...{
-            children: [
-              {
-                type: 'interval',
-                data: barData2026,
-                xField: 'month',
-                yField: 'value',
-                colorField: 'type',
-                group: true,
-                scale: {
-                  x: { domain: months },
-                  y: { key: 'leftY', domainMin: 0, domainMax: 5000 },
-                  color: {
-                    domain: ['收入', '净利润'],
-                    range: ['#1E293B', '#6EE7B7'],
-                  },
-                },
-                axis: {
-                  y: {
-                    title: false,
-                    position: 'left',
-                    labelFormatter: (v: number) => (v === 0 ? '0' : `${v}万`),
-                    grid: {
-                      line: {
-                        style: { lineDash: [4, 4], stroke: '#E5E7EB' },
-                      },
-                    },
-                  },
-                  x: { grid: null, labelAutoHide: false, transform: [] },
-                },
-                legend: false,
-                tooltip: {
-                  title: (d: { month: string }) => d.month,
+              legend: false,
+              tooltip: {
+                title: (d: { month: string }) => d.month,
+              },
+            },
+            // ② 预测值柱子 — 半透明
+            {
+              type: 'interval',
+              data: projectedBarData,
+              xField: 'month',
+              yField: 'value',
+              colorField: 'type',
+              group: true,
+              scale: {
+                y: { key: 'leftY' },
+                color: {
+                  domain: ['收入', '净利润'],
+                  range: ['#1E293B', '#6EE7B7'],
                 },
               },
-              {
-                type: 'line',
-                data: rate2026Actual,
-                xField: 'month',
-                yField: 'value',
-                scale: {
-                  y: { key: 'rightY', domainMin: 0, domainMax: 0.2 },
-                  color: { range: ['#3B82F6'] },
-                },
-                axis: {
-                  y: {
-                    title: false,
-                    position: 'right',
-                    labelFormatter: (v: number) => `${(v * 100).toFixed(0)}%`,
-                    grid: null,
-                  },
-                },
-                style: { stroke: '#3B82F6', lineWidth: 2 },
-                legend: false,
-                tooltip: {
-                  items: [
-                    (d: { value: number }) => ({
-                      name: '净利润率',
-                      value: `${(d.value * 100).toFixed(1)}%`,
-                      color: '#3B82F6',
-                    }),
-                  ],
+              style: {
+                fillOpacity: 0.35,
+              },
+              axis: {
+                y: false,
+                x: false,
+              },
+              legend: false,
+              tooltip: {
+                title: (d: { month: string }) => d.month,
+              },
+            },
+            // ③ 实际值折线 — 实线
+            {
+              type: 'line',
+              data: actualLineData,
+              xField: 'month',
+              yField: 'value',
+              scale: {
+                y: { key: 'rightY', domainMin: 0, domainMax: 0.2 },
+                color: { range: ['#3B82F6'] },
+              },
+              axis: {
+                y: {
+                  title: false,
+                  position: 'right',
+                  labelFormatter: (v: number) => `${(v * 100).toFixed(0)}%`,
+                  grid: null,
                 },
               },
-            ],
-          }}
-        />
-      </Card>
-    </div>
+              style: { stroke: '#3B82F6', lineWidth: 2 },
+              legend: false,
+              tooltip: {
+                items: [
+                  (d: { value: number }) => ({
+                    name: '净利润率',
+                    value: `${(d.value * 100).toFixed(1)}%`,
+                    color: '#3B82F6',
+                  }),
+                ],
+              },
+            },
+            // ④ 预测值折线 — 虚线
+            {
+              type: 'line',
+              data: projectedLineData,
+              xField: 'month',
+              yField: 'value',
+              scale: {
+                y: { key: 'rightY', domainMin: 0, domainMax: 0.2 },
+                color: { range: ['#3B82F6'] },
+              },
+              style: {
+                stroke: '#3B82F6',
+                lineWidth: 2,
+                lineDash: [6, 4],
+              },
+              axis: {
+                y: false,
+              },
+              legend: false,
+              tooltip: {
+                items: [
+                  (d: { value: number }) => ({
+                    name: '净利润率（预测）',
+                    value: `${(d.value * 100).toFixed(1)}%`,
+                    color: '#3B82F6',
+                  }),
+                ],
+              },
+            },
+          ],
+        }}
+      />
+    </Card>
   );
 };
 

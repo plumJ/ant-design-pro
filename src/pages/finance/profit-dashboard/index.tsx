@@ -6,6 +6,7 @@ import ComparisonCards from './components/ComparisonCards';
 import type { PeriodValue } from './components/PeriodFilter';
 import PeriodFilter from './components/PeriodFilter';
 import ProfitAnalysis from './components/ProfitAnalysis';
+import ProfitDetailTable from './components/ProfitDetailTable';
 import TopCards from './components/TopCards';
 
 const now = dayjs();
@@ -29,6 +30,7 @@ const ProfitDashboard: FC = () => {
       <TopCards />
       <ComparisonCards />
       <ProfitAnalysis />
+      <ProfitDetailTable />
       {/* TODO: 后续添加利润构成饼图 */}
       {/* TODO: 后续添加业务线明细 */}
     </PageContainer>
