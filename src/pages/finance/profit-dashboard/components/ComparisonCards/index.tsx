@@ -43,43 +43,43 @@ interface CardConfig {
 const cards: CardConfig[] = [
   {
     title: '本月收入',
-    primaryValue: '￥2,360.00',
+    primaryValue: '￥2,360,000',
     mom: {
       label: '环比（上月）',
-      referenceValue: '￥2,500.00',
+      referenceValue: '￥2,500,000',
       rate: -5.6,
     },
     yoy: {
       label: '同比（去年同月）',
-      referenceValue: '￥2,200.00',
+      referenceValue: '￥2,200,000',
       rate: 7.27,
     },
   },
   {
     title: '本月销售净毛利',
-    primaryValue: '￥6,169.00',
+    primaryValue: '￥6,169,000',
     mom: {
       label: '环比（上月）',
-      referenceValue: '￥5,800.00',
+      referenceValue: '￥5,800,000',
       rate: 6.36,
     },
     yoy: {
       label: '同比（去年同月）',
-      referenceValue: '￥5,500.00',
+      referenceValue: '￥5,500,000',
       rate: 12.16,
     },
   },
   {
     title: '本月净利润',
-    primaryValue: '￥3,380.00',
+    primaryValue: '￥3,380,000',
     mom: {
       label: '环比（上月）',
-      referenceValue: '￥3,200.00',
+      referenceValue: '￥3,200,000',
       rate: 5.62,
     },
     yoy: {
       label: '同比（去年同月）',
-      referenceValue: '￥3,050.00',
+      referenceValue: '￥3,050,000',
       rate: 10.82,
     },
   },

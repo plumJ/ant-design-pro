@@ -28,13 +28,13 @@ const TopCards: FC = () => {
   return (
     <Row gutter={24} style={{ marginBottom: 24 }}>
       <Col xs={24} sm={12} lg={6}>
-        <AnnualCard title="全年收入" value="￥2,360.00" />
+        <AnnualCard title="全年收入" value="￥2,360,000" />
       </Col>
       <Col xs={24} sm={12} lg={6}>
-        <AnnualCard title="全年净销售净毛利" value="￥6,169.00" />
+        <AnnualCard title="全年净销售净毛利" value="￥6,169,000" />
       </Col>
       <Col xs={24} sm={12} lg={6}>
-        <AnnualCard title="全年净利润" value="￥1,122.00" />
+        <AnnualCard title="全年净利润" value="￥1,122,000" />
       </Col>
       <Col xs={24} sm={12} lg={6}>
         <AnnualCard title="全年净利润率" value="15.0%" />
