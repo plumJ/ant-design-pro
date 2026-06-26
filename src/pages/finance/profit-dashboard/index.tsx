@@ -1,4 +1,5 @@
 import { PageContainer } from '@ant-design/pro-components';
+import { Card, Col, Row } from 'antd';
 import dayjs from 'dayjs';
 import type { FC } from 'react';
 import { useState } from 'react';
@@ -7,6 +8,7 @@ import type { PeriodValue } from './components/PeriodFilter';
 import PeriodFilter from './components/PeriodFilter';
 import ProfitAnalysis from './components/ProfitAnalysis';
 import ProfitDetailTable from './components/ProfitDetailTable';
+import ProfitWaterfallChart from './components/ProfitDetailTable/ProfitWaterfallChart';
 import TopCards from './components/TopCards';
 
 const now = dayjs();
@@ -29,7 +31,21 @@ const ProfitDashboard: FC = () => {
       <PeriodFilter value={period} onChange={handlePeriodChange} />
       <TopCards />
       <ComparisonCards />
-      <ProfitAnalysis />
+      <Row gutter={24} style={{ marginBottom: 24 }}>
+        <Col span={12}>
+          <ProfitAnalysis />
+        </Col>
+        <Col span={12}>
+          <Card
+            variant="borderless"
+            title={
+              <span style={{ fontWeight: 600, fontSize: 16 }}>利润瀑布图</span>
+            }
+          >
+            <ProfitWaterfallChart />
+          </Card>
+        </Col>
+      </Row>
       <ProfitDetailTable />
       {/* TODO: 后续添加利润构成饼图 */}
       {/* TODO: 后续添加业务线明细 */}
