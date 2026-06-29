@@ -47,6 +47,7 @@ export default {
   'menu.account.logout': '退出登录',
   'menu.finance': '财务管理',
   'menu.finance.profit-dashboard': '利润看板',
+  'menu.finance.cost-analysis': '费用分析综合看板',
   'menu.editor': '图形编辑器',
   'menu.editor.flow': '流程编辑器',
   'menu.editor.mind': '脑图编辑器',

@@ -87,7 +87,9 @@ const ProfitAnalysis: FC = () => {
   return (
     <Card
       variant="borderless"
-      title={<span style={{ fontWeight: 600, fontSize: 16 }}>年利润趋势</span>}
+      title={
+        <span style={{ fontWeight: 600, fontSize: 16 }}>📈 年利润趋势</span>
+      }
     >
       <div>
         {legendNode}

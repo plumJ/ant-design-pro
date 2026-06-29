@@ -47,6 +47,7 @@ export default {
   'menu.account.logout': 'Logout',
   'menu.finance': 'Finance',
   'menu.finance.profit-dashboard': 'Profit Dashboard',
+  'menu.finance.cost-analysis': 'Cost Analysis Dashboard',
   'menu.editor': 'Graphic Editor',
   'menu.editor.flow': 'Flow Editor',
   'menu.editor.mind': 'Mind Editor',

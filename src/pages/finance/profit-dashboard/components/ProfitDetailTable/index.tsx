@@ -246,7 +246,9 @@ const ProfitDetailTable: FC = () => {
     <Card
       variant="borderless"
       style={{ marginBottom: 24 }}
-      title={<span style={{ fontWeight: 600, fontSize: 16 }}>利润明细表</span>}
+      title={
+        <span style={{ fontWeight: 600, fontSize: 16 }}>📋 利润明细表</span>
+      }
       extra={
         <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>

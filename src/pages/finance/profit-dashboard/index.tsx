@@ -39,7 +39,9 @@ const ProfitDashboard: FC = () => {
           <Card
             variant="borderless"
             title={
-              <span style={{ fontWeight: 600, fontSize: 16 }}>利润瀑布图</span>
+              <span style={{ fontWeight: 600, fontSize: 16 }}>
+                🌊 利润瀑布图
+              </span>
             }
           >
             <ProfitWaterfallChart />

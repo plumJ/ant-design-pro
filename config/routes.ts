@@ -58,6 +58,12 @@ export default [
         path: '/finance/profit-dashboard',
         component: './finance/profit-dashboard',
       },
+      {
+        name: 'cost-analysis',
+        icon: 'fund',
+        path: '/finance/cost-analysis',
+        component: './finance/cost-analysis',
+      },
     ],
   },
   {
